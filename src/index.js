@@ -17,3 +17,4 @@ app.listen(PORT, () => {
 });
 
 app.use('/talker', talkerRoutes);
+// app.use('/talker:id', talkerRoutes);
