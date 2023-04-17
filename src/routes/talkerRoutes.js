@@ -3,7 +3,7 @@ const { readFile } = require('../fsTalkerManager');
 
 const router = express.Router();
 
-router.get('/', async (_req, res) => {
+router.get('/', async (_req, res, next) => {
   try {
     const data = await readFile();
     if (!data) {
@@ -11,11 +11,11 @@ router.get('/', async (_req, res) => {
     }
     return res.status(200).json(data);
   } catch (error) {
-    return null;
+    return next(error);
   }  
 });
 
-router.get('/:id', async (req, res) => {
+router.get('/:id', async (req, res, next) => {
     try {
       const idReq = Number(req.params.id);  
       const dataTalkers = await readFile();
@@ -25,7 +25,7 @@ router.get('/:id', async (req, res) => {
       }
       return res.status(200).json(chosenTalker);
     } catch (error) {
-      return null;
+      return next(error);
     }  
   });
 

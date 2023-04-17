@@ -12,4 +12,8 @@ const readFile = async () => {
     }
 };
 
-module.exports = { readFile };
+const writeFile = async (newFile) => {
+  await fs.writeFile(filePath, JSON.stringify(newFile));
+};
+
+module.exports = { readFile, writeFile };
