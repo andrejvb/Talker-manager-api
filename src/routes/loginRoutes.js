@@ -3,9 +3,9 @@ const tokenGenerate = require('../services/generateToken');
 const emailValidation = require('../middleware/emailValidation');
 const passwordValidation = require('../middleware/passwordValidation');
 
-const router = express.Router();
+const loginRouter = express.Router();
 
-router.post('/', emailValidation, passwordValidation, (req, res, next) => {
+loginRouter.post('/', emailValidation, passwordValidation, (_req, res, next) => {
   try { 
     return res.status(200).json({ token: tokenGenerate() });
   } catch (error) {
@@ -13,4 +13,4 @@ router.post('/', emailValidation, passwordValidation, (req, res, next) => {
   }
 });
 
-module.exports = router;
+module.exports = loginRouter;

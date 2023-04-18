@@ -20,3 +20,5 @@ app.listen(PORT, () => {
 app.use('/talker', talkerRoutes);
 // app.use('/talker:id', talkerRoutes);
 app.use('/login', loginRoutes);
+
+app.use('/generateToken', talkerRoutes);

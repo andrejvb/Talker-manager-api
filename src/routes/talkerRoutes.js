@@ -1,9 +1,17 @@
 const express = require('express');
-const { readFile } = require('../fsTalkerManager');
+const { readFile, writeFile } = require('../fsTalkerManager');
 
-const router = express.Router();
+const tokenValidation = require('../middleware/tokenValidation');
+const nameValidation = require('../middleware/nameValidation');
+const ageValidation = require('../middleware/ageValidation');
+const talkValidation = require('../middleware/talkValidation');
+const watchedAtValidation = require('../middleware/watchedAtValidation');
+const rateValidation = require('../middleware/rateValidation');
+const rateValidationII = require('../middleware/rateValidationII');
 
-router.get('/', async (_req, res, next) => {
+const talkerRouter = express.Router();
+
+talkerRouter.get('/', async (_req, res, next) => {
   try {
     const data = await readFile();
     if (!data) {
@@ -15,7 +23,7 @@ router.get('/', async (_req, res, next) => {
   }  
 });
 
-router.get('/:id', async (req, res, next) => {
+talkerRouter.get('/:id', async (req, res, next) => {
     try {
       const idReq = Number(req.params.id);  
       const dataTalkers = await readFile();
@@ -29,4 +37,28 @@ router.get('/:id', async (req, res, next) => {
     }  
   });
 
-module.exports = router;
+  const validation = [
+    tokenValidation, 
+    nameValidation, 
+    ageValidation, 
+    talkValidation, 
+    watchedAtValidation,
+    rateValidation,
+    rateValidationII];
+
+talkerRouter.post('/', validation, async (req, res, next) => {
+  try {
+    const { age, name, talk } = req.body;
+    const { watchedAt, rate } = talk;
+    const talkers = await readFile();
+    const newId = Number(talkers[talkers.length - 1].id) + 1;
+    const newTalker = { id: newId, name, age, talk: { watchedAt, rate } };
+    const updateTalkers = [...talkers, newTalker];
+    await writeFile(updateTalkers);
+    return res.status(201).json(newTalker);
+  } catch (error) {
+    return next(error);
+  }
+});
+
+module.exports = talkerRouter;
