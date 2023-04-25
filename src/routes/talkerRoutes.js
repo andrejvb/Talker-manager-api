@@ -80,4 +80,16 @@ talkerRouter.put('/:id', validation, findTalkerValidation, async (req, res, next
   }
 });
 
+talkerRouter.delete('/:id', tokenValidation, async (req, res, next) => {
+  try {
+    const id = Number(req.params.id);
+    const talkers = await readFile();
+    const deleteTalker = talkers.filter((talker) => Number(talker.id) !== id);
+    await writeFile(deleteTalker);
+    return res.status(204).json({});
+  } catch (error) {
+    next(error);
+  }
+})
+
 module.exports = talkerRouter;
