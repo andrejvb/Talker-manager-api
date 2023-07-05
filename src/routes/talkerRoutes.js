@@ -70,7 +70,7 @@ talkerRouter.put('/:id', validation, findTalkerValidation, async (req, res, next
     const talkers = await readFile();
     const targetTalker = talkers.find((talker) => Number(talker.id) === id);
     const editedTalker = { id, name, age, talk: { watchedAt, rate } };
-    console.log('logiiii', id);
+    console.log('My best friend is the console.log', id);
     const index = talkers.indexOf(targetTalker);
     talkers.splice(index, 1, editedTalker);
     await writeFile(talkers);
